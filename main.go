@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	proto "github.com/tuanpham1993/firstsrv/proto"
 	"fmt"
+
+	proto "github.com/tuanpham1993/first-srv/proto"
 
 	empty "github.com/golang/protobuf/ptypes/empty"
 	"github.com/micro/go-micro/v2"
@@ -17,15 +18,18 @@ func (w *Say) Hello(ctx context.Context, req *proto.Request, rsp *proto.Response
 }
 
 func (w *Say) All(ctx context.Context, req *empty.Empty, rsp *proto.Response) error {
+	fmt.Println("All from srv")
 	rsp.Msg = "Hello everyone"
 	return nil
 }
 
 func main() {
+	fmt.Println("foo")
 	service := micro.NewService(
-		micro.Name("go.micro.srv.welcome"),
+		micro.Name("go.micro.srv.wc"),
 	)
 
+	service.Init()
 	// proto.Re
 	proto.RegisterSayHandler(service.Server(), new(Say))
 
@@ -33,4 +37,5 @@ func main() {
 	if err := service.Run(); err != nil {
 		fmt.Println(err)
 	}
+	fmt.Println("bar")
 }
